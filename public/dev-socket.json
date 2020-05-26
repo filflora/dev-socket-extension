@@ -1,0 +1,9 @@
+{
+    "messages": [{
+        "label": "Test 1",
+        "payload": { "type": "test-1", "data": 123 }
+    }, {
+        "label": "Test 2",
+        "payload": { "type": "test-2", "data": 456 }
+    }]
+}

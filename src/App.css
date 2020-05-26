@@ -1,0 +1,30 @@
+@import "../node_modules/toastr/build/toastr.min.css";
+
+
+.server-status {
+  font-size: .8em;
+  padding: .2em .3em;
+  display: flex;
+  flex-direction: row;
+}
+
+  .server-status__value {
+    flex-grow: 1;
+  }
+
+  .server-status__processes {
+    flex-grow: 1;
+    text-align: right;
+  }
+
+.checking {
+  background-color: lightblue;
+}
+
+.available {
+  background-color: lightgreen;
+}
+
+.unavailable {
+  background-color: red;
+}

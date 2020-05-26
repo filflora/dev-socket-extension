@@ -1,0 +1,12 @@
+{
+  "name": "dev-socket",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Adds DevSocket panel support.",
+  "devtools_page": "devtools.html",
+  "permissions": [
+    "tabs",
+    "http://*/*",
+    "https://*/*"
+  ]
+}
