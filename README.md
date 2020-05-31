@@ -1,68 +1,62 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is created to make development with WebSocket easier. Its main purpose is to send WebSocket messages through a development server on localhost with predefined message presets that can be edited.
 
-## Available Scripts
+NOTE: This extension can only be used with [dev-socket-server](https://www.npmjs.com/package/dev-socket-server).
 
-In the project directory, you can run:
 
-### `yarn start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Prepare the Server
+Install [dev-socket-server](https://www.npmjs.com/package/dev-socket-server) on your local machine with `npm` or `yarn`. You can choose to install it globally so you can use the `dev-socket` command anywhere.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```
+> npm install dev-socket-server --global
 
-### `yarn test`
+// OR
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> yarn global add dev-socket-server
+```
 
-### `yarn build`
+Start up the server with the `dev-socket` command in your terminal. The default PORT is `3100` which you can change with the `--port` flag in case it is already used:
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+> dev-socket
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Prepare the Extension
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Use the [dev-socket-extension.crx](https://github.com/filflora/dev-socket-extension/blob/master/dev-socket-extension.crx) file to load the extension to Chrome.
 
-### `yarn eject`
+NOTE: Chrome Store publication is pending. Until then the direct file method needs to be used.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Once the extension is loaded open up dev-tools and look for the "DevSocket" tab in the top.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+When the tab is activated an automatic connection attempt is requested to the `dev-socket-server` on `http://localhost:3100/health` (PORT might differ if you changed that when starting the server).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Presets from file
+Presets can be loaded from a `dev-socket.json` configuration file served on `http://localhost:3000/dev-socket.json`. The content should be following this pattern:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```json
+{
+    "messages": [{
+        "id": 1,
+        "label": "Win game",
+        "payload": { "type": "update-status", "status": "won" }
+    }, {
+        "id": 2,
+        "label": "Update score - invalid",
 
-## Learn More
+        // Note: the payload can be a string 
+        // so invalid JSON messages can be tested too.
+        "payload": "{ \"type\": \"update-score\", \"score\": undefined }"
+    }]
+}
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Local presets
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+If you click `Use local presets` all the presets are stored in localStorage and the list becomes editable. You can rename it, change the message content (even to an invalid JSON), delete it and send it through the server.
 
-### Code Splitting
+## Export
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+There is an `Export presets` button on the right-bottom corner where you can copy the current preset configuration to your clipboard. Optionally you can copy it from the localStorage directly just open the dev-tools of the Extension and go to Application > localStorage.
 
-### Analyzing the Bundle Size
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
