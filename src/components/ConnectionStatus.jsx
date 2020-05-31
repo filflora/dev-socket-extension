@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import { ConfigContext } from "../App";
 import { useEffect } from "react";
 import { useCallback } from "react";
-import toastr from 'toastr';
 
 const SERVER_STATUS = {
   checking: "checking",
@@ -35,11 +34,9 @@ function ConnectionStatus() {
       .then((response) => response.json())
       .then((response) => {
         setStatus(SERVER_STATUS.available);
-        toastr.success('DevSocket server available');
       })
       .catch((e) => {
         setStatus(SERVER_STATUS.unavailable);
-        toastr.error('DevSocket server unavailable');
       })
       .finally(() => {
         stopProcess("checking-server");

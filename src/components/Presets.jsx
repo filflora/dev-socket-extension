@@ -1,76 +1,122 @@
-import React, { useContext, useRef, useState, Fragment } from "react";
+import React, { useContext, useRef, Fragment, useCallback } from "react";
 import { ConfigContext } from "../App";
-import { useEffect } from "react";
-import { useCallback } from "react";
 import toastr from "toastr";
 
 function PresetList() {
   const {
-    startProcess,
-    stopProcess,
-    "dev-socket-config-url": configUrl,
-    "dev-socket-server-url": serverUrl
+    presets,
+    setPresets,
+    setPresetConfigUrl,
+    editedPresetId,
+    setEditedPresetId,
+    localPresets,
+    setLocalPresets,
+    sendMessage,
   } = useContext(ConfigContext);
-  const [presets, setPresets] = useState([]);
+
   let initialised = useRef(false);
 
-  const loadPresets = useCallback(() => {
-    if (initialised.current) {
-      return;
-    }
-    initialised.current = true;
-    startProcess("load-presets");
-
-    fetch(`${configUrl}`)
-      .then((response) => response.json())
-      .then((response) => {
-        debugger;
-        setPresets(response.messages);
-        toastr.success("DevSocket presets loaded");
-      })
-      .catch((e) => {
-        toastr.error("Failed to load DevSocket presets");
-        debugger;
-      })
-      .finally(() => {
-        stopProcess("load-presets");
-      });
-  }, [startProcess, stopProcess, configUrl]);
-
-  useEffect(() => {
-    loadPresets();
-  });
-
   const onPresetClick = (payload) => {
-    debugger;
-    fetch(`${serverUrl}/send-message`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: JSON.stringify(payload)
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        debugger;
-        
-        toastr.success('Message sent');
-      })
-      .catch((e) => {
-        
-        debugger;
-        toastr.error('Could not send message');
-      })
-      .finally(() => {
-        
-      });
-  }
+    sendMessage(payload);
+  };
 
-  return <>{presets.length && presets.map((preset, idx) => (<Fragment key={idx}>
-      <button onClick={() => onPresetClick(preset.payload)}>{preset.label}</button><br/>
-      </Fragment>
-  ))}</>;
+  const onPresetConfigLoadClick = () => {
+    const input = document.getElementById("preset-config-url");
+    if (input.value) {
+      setPresetConfigUrl(input.value);
+      setPresets(null);
+      initialised.current = false;
+    } else {
+      toastr.warning("Could not load preset config as no URL is defined");
+    }
+  };
+
+  const onPresetEditClick = (e, presetId) => {
+    setEditedPresetId(presetId);
+
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const onLocalPresetOverride = () => {
+    setLocalPresets(presets);
+  };
+
+  const onClearLocalPresets = () => {
+    if (
+      // eslint-disable-next-line no-restricted-globals
+      confirm(
+        "Are you sure you want to remove all local overrides? This can not be undone."
+      )
+    ) {
+      setLocalPresets(null);
+    }
+  };
+
+  const orderedPresets = useCallback(() => {
+    const base = !!localPresets ? localPresets : presets;
+    return base
+      ? base.sort((a, b) =>
+          a.label === b.label ? 0 : a.label < b.label ? -1 : 1
+        )
+      : [];
+  }, [presets, localPresets]);
+
+  const onAddNewPresetClick = () => {
+    setEditedPresetId(null);
+  };
+
+  return (
+    <Fragment>
+      <div className="box">
+        <label htmlFor="preset-config-url">Preset config URL</label>
+        <div className="input-group">
+          <input
+            type="text"
+            id="preset-config-url"
+            defaultValue="http://localhost:3000/dev-socket.json"
+          />
+          <button onClick={() => onPresetConfigLoadClick()}>Load</button>
+        </div>
+        {!!localPresets && <div className="overlay"></div>}
+      </div>
+
+      <div className="hr"></div>
+
+      {!!localPresets ? (
+        <button onClick={() => onClearLocalPresets()}>
+          Clear local overrides
+        </button>
+      ) : (
+        <button onClick={() => onLocalPresetOverride()}>
+          Use local presets
+        </button>
+      )}
+
+      <div className="hr"></div>
+
+      <ul className="preset-button-wrapper">
+        {orderedPresets().map((preset, idx) => (
+          <Fragment key={idx}>
+            <li
+              className={preset.id === editedPresetId ? "active" : ""}
+              onClick={() => onPresetClick(preset.payload)}
+            >
+              {preset.label}
+              {!!localPresets && (
+                <button onClick={(e) => onPresetEditClick(e, preset.id)}>
+                  Edit
+                </button>
+              )}
+            </li>
+          </Fragment>
+        ))}
+        {!!localPresets && (
+          <li onClick={() => onAddNewPresetClick()}>Add new</li>
+        )}
+      </ul>
+    </Fragment>
+  );
 }
 
 export default PresetList;

@@ -1,21 +1,20 @@
 @import "../node_modules/toastr/build/toastr.min.css";
 
-
 .server-status {
-  font-size: .8em;
-  padding: .2em .3em;
+  font-size: 0.8em;
+  padding: 0.2em 0.3em;
   display: flex;
   flex-direction: row;
 }
 
-  .server-status__value {
-    flex-grow: 1;
-  }
+.server-status__value {
+  flex-grow: 1;
+}
 
-  .server-status__processes {
-    flex-grow: 1;
-    text-align: right;
-  }
+.server-status__processes {
+  flex-grow: 1;
+  text-align: right;
+}
 
 .checking {
   background-color: lightblue;
@@ -26,5 +25,167 @@
 }
 
 .unavailable {
-  background-color: red;
+  background-color: #eb3941;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.2em;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: row;
+}
+
+.input-group input {
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 1.3rem;
+  min-width: 1px;
+}
+
+.input-group button {
+  height: 1.3rem;
+  line-height: 1.2rem;
+  font-size: 0.9em;
+  padding: 0 0.3em;
+  margin: 0 0 0 0.2em;
+}
+
+.preset-button-wrapper {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  flex-grow: 1;
+}
+
+.preset-button-wrapper li {
+  display: block;
+  padding: 0.8em 1em;
+  cursor: pointer;
+  border-bottom: 1px solid #dfdede;
+}
+.preset-button-wrapper li button {
+  float: right;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+.preset-button-wrapper li button:focus,
+.preset-button-wrapper li button:active {
+  outline: 0;
+}
+.preset-button-wrapper li button:hover {
+  color: blue;
+}
+.preset-button-wrapper li.active,
+.preset-button-wrapper li:hover {
+  background-color: #e0e6f0;
+}
+
+.editor-container {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}
+
+.editor-container input {
+  margin: 0 1px;
+  padding: 5px 10px;
+}
+
+.editor-container textarea {
+  flex-grow: 1;
+  border: 1px solid transparent;
+  padding: 2em;
+  -moz-box-shadow: inset 0 0 10px transparent;
+  -webkit-box-shadow: inset 0 0 10px transparent;
+  box-shadow: inset 0 0 10px transparent;
+  border-left: 2px solid transparent;
+}
+
+.editor-container textarea.invalid {
+  -moz-box-shadow: inset 0 0 20px rgba(255, 0, 0, .4);
+  -webkit-box-shadow: inset 0 0 20px rgba(255, 0, 0, .4);
+  box-shadow: inset 0 0 20px rgba(255, 0, 0, .4);
+}
+.editor-container textarea.valid {
+  -moz-box-shadow: inset 0 0 20px rgba(0, 255, 0, .4);
+  -webkit-box-shadow: inset 0 0 20px rgba(0, 255, 0, .4);
+  box-shadow: inset 0 0 20px rgba(0, 255, 0, .4);
+}
+
+.editor-container textarea:focus,
+.editor-container textarea:active {
+  outline: 0;
+}
+
+.editor-panel {
+  background-color: #f3f3f3;
+  border-left: 1px solid #d0d0d0;
+  width: 25%;
+  padding: 0.8em;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-panel .stretch {
+  flex-grow: 1;
+}
+
+.editor-panel button {
+  padding: .5em 1em;
+  cursor: pointer;
+  border: 1px solid #6e6e6e;
+  border-radius: 3px;
+}
+.editor-panel button:hover {
+  background-color: #e6e5e5;
+}
+.editor-panel button + button {
+  margin-top: .6em;
+}
+
+.editor-panel button.send-message-btn {
+  background-color: #1a73e8;
+  border: 1px solid transparent;
+  padding: 1em 1em;
+  color: #FFF;
+}
+.editor-panel button.send-message-btn:hover {
+  background-color: #0b61d3;
+}
+
+.editor-panel button.delete-preset-btn:hover {
+  border-radius: 3px;
+  color: #FFF;
+  background-color: #eb3941;
+}
+
+.editor-workarea {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+#validator-output {
+  max-height: 10em;
+  border-top: 1px solid #ccc;
+}
+
+#validator-output .indicator {
+  height: 1em;
+}
+
+#validator-output .indicator.invalid {
+  background-color: #eb3941;
+}
+#validator-output .indicator.valid {
+  background-color: green;
+}
+
+#validator-output .message {
+  padding: 0.8em;
 }
