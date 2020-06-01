@@ -50,6 +50,8 @@ function PresetList() {
       )
     ) {
       setLocalPresets(null);
+      setPresets(null);
+      setEditedPresetId(null);
     }
   };
 

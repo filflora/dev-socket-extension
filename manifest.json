@@ -1,12 +1,13 @@
 {
   "name": "dev-socket",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "manifest_version": 2,
-  "description": "Adds DevSocket panel support.",
+  "description": "Make development of WebSocket features easier with dev-tools WebSocket message presets.",
   "devtools_page": "devtools.html",
+  "icons": {
+    "128": "icon.png"
+  },
   "permissions": [
-    "tabs",
-    "http://*/*",
-    "https://*/*"
+    "http://localhost/*"
   ]
 }

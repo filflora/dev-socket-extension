@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import { ConfigContext } from "../App";
 import toastr from "toastr";
-import copyToClipboard from "clipboard-copy";
 
 function MessageEditor(props) {
   const {
@@ -122,11 +121,12 @@ function MessageEditor(props) {
         ))
     ) {
       const newPreset = {
-        id:
-          Math.max.apply(
-            null,
-            localPresets.map((preset) => preset.id)
-          ) + 1,
+        id: localPresets.length
+          ? Math.max.apply(
+              null,
+              localPresets.map((preset) => preset.id)
+            ) + 1
+          : 1,
         label: inputRef.current.value,
         payload: textareaRef.current.value,
       };
@@ -152,13 +152,25 @@ function MessageEditor(props) {
 
   const onExportClick = () => {
     const output = JSON.stringify(localPresets, null, 4);
-    copyToClipboard(output)
-      .then(() => toastr.success("Presets copied to clipboard"))
-      .catch((e) =>
-        toastr.error(
-          'Could not copy presets to clipboard. Try again or look for "presets" in dev-tools localStorage.'
-        )
+
+    debugger;
+    const field = document.createElement("textarea");
+    document.body.appendChild(field);
+    field.style.position = "absolute";
+    field.style.left = "-9999px";
+    field.style.top = "-9999px";
+    field.value = output;
+    field.focus();
+    field.select();
+    const result = document.execCommand("copy");
+    if (result === "unsuccessful") {
+      toastr.error(
+        'Could not copy presets to clipboard. Try again or look for "presets" in dev-tools localStorage.'
       );
+    } else {
+      toastr.success("Presets copied to clipboard");
+    }
+    document.body.removeChild(field);
   };
 
   return (
@@ -199,7 +211,9 @@ function MessageEditor(props) {
         <div className="stretch"></div>
 
         {editedPresetId && !!localPresets && (
-          <button className='delete-preset-btn' onClick={() => onDeleteClick()}>Delete preset</button>
+          <button className="delete-preset-btn" onClick={() => onDeleteClick()}>
+            Delete preset
+          </button>
         )}
 
         {!!localPresets && (
